@@ -1,0 +1,13 @@
+.v-select > .vs__dropdown-toggle {
+  width: 100%;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+.v-select .vs__selected-options, .vs__search, .vs__actions {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.vs__selected {
+}
