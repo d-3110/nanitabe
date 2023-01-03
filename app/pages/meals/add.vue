@@ -1,31 +1,54 @@
 <script setup lang="ts">
-const { data: tags } = useFetch('/api/v1/tag')
-const isError = ref<Boolean>(false)
-const isDisabled = ref<Boolean>(false)
+definePageMeta({
+  middleware: 'auth'
+})
+
+import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
+import { object, string } from 'yup'
+
+const schema = object({
+  name: string().required('名前は入れてちょうだい')
+})
+const { validate, resetForm } = useForm({ validationSchema: schema })
+const { value: name, errorMessage: nameError } = useField<string>('name')
+
+const { data: tags } = await useFetch('/api/v1/tag', {
+  headers: useRequestHeaders(['cookie'])
+})
+
 const isModal = ref<Boolean>(false)
+const buttonDisabled = ref<Boolean>(false)
 const type = ref<Number>(0)
-const name = ref<String>('')
 const note = ref<String>('')
 const selectedTags = ref<Array<Number>>([])
 
+const isDirty = useIsFormDirty();
+const isValid = useIsFormValid();
+const isDisabled = computed(() => {
+  return !isDirty.value || !isValid.value;
+})
 const options = computed(() => {
   let result = <Array<String>>([])
-  tags.value!.forEach(tag => {
+  tags!.value.forEach((tag :any) => {
     result.push(tag.name)
   })
   return result
 })
+
 const submit = async () => {
-  isDisabled.value = true
-  const { data } = await useFetch('/api/v1/meal', {
-    method: 'post',
-    body: { type: type.value, name: name.value, note: note.value, tags: selectedTags.value },
-  })
-  isModal.value = true
+  const result = await validate()
+  if (result.valid) {
+    buttonDisabled.value = true
+    const { data } = await useFetch('/api/v1/meal', {
+      method: 'post',
+      body: { type: type.value, name: name.value, note: note.value, tags: selectedTags.value },
+    })
+    isModal.value = true
+  }
 }
 const onCloseModal = () => {
   isModal.value = false
-  isDisabled.value = false
+  buttonDisabled.value = false
   type.value = 0
   name.value = ''
   note.value = ''
@@ -50,7 +73,7 @@ const onCloseModal = () => {
       <div class="mt-4">
         <input v-model="name" type="text" placeholder="食事名" class="input input-bordered w-full max-w-xs" />
         <label class="label">
-          <span v-if="isError" class="label-text-alt text-error">エラー</span>
+          <small v-if="nameError"><span class="text-error">{{ nameError }}</span></small>
         </label>
       </div>
       <div class="mt-4">
@@ -67,7 +90,7 @@ const onCloseModal = () => {
         />
       </div>
       <div class="flex justify-center items-center mt-4">
-        <button @click="submit" class="btn btn-lg btn-primary w-full"  type="button" :disabled="isDisabled">登録</button>
+        <button @click="submit" class="btn btn-lg btn-primary w-full" type="button" :disabled="isDisabled || buttonDisabled">登録</button>
       </div>
     </form>
   </div>

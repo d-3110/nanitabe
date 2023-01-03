@@ -1,9 +1,22 @@
+<script setup>
+const user = useSupabaseUser()
+const client = useSupabaseClient()
+const logout = async () => {
+  await client.auth.signOut()
+  user.value = null
+  return navigateTo('/')
+}
+const navigation = [
+  { name: 'ホーム', href: '/' },
+  { name: '食事追加', href: '/meals/add' },
+]
+</script>
 <template>
   <div class="navbar bg-neutral text-neutral-content rounded-full">
     <div class="navbar-start">
       <div class="dropdown">
         <label tabindex="0" class="btn btn-ghost btn-circle">
-          <font-awesome-icon v-if="!open" class="text-primary block fa-lg" aria-hidden="true" :icon="['fa','burger']"/>
+          <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" icon="burger"/>
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li v-for="item in navigation" :key="item.name">
@@ -18,18 +31,11 @@
       <a class="btn btn-ghost normal-case text-xl text-primary">なにたべ</a>
     </div>
     <div class="navbar-end">
-      <button class="btn btn-ghost btn-circle">
+      <button class="btn btn-ghost btn-circle"  @click="logout">
         <div class="indicator">
-          <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" :icon="['fa','right-from-bracket']"/>
+          <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" icon="fa-right-from-bracket"/>
         </div>
       </button>
     </div>
   </div>
 </template>
-
-<script setup>
-const navigation = [
-  { name: 'ホーム', href: '/' },
-  { name: '食事追加', href: '/meals/add' },
-]
-</script>

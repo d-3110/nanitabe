@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { serverSupabaseClient } from '#supabase/server'
 
-export default defineEventHandler(async () => {
-  const prisma = new PrismaClient();
-  const tags = await prisma.tags.findMany();
-  return tags;
-});
+export default eventHandler(async (event) => {
+  const client = serverSupabaseClient(event)
+  const { data } = await client.from('tags').select('*')
+  return data
+})
