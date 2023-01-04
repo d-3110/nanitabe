@@ -48,31 +48,24 @@ const formatDate = (dt :Date) => {
   var d = ('00' + dt.getDate()).slice(-2);
   return (y + '-' + m + '-' + d);
 }
-const { test } = await useFetch('/api/v1/gacha', {
-  headers: useRequestHeaders(['cookie'])
-})
 const submit = async () => {
   const result = await validate()
   if (result.valid) {
     buttonDisabled.value = true
-    console.log('api叩くよ')
     const { data } = await useFetch('/api/v1/gacha', {
-      headers: useRequestHeaders(['cookie'])
+      params: {
+        types: types.value.length === 0 ? [0, 1] : types.value,
+        from: from.value + ' 00:00' ,
+        to: to.value + ' 23:59',
+        tags: selectedTags.value
+      },
+      headers: useRequestHeaders(['cookie']),
     })
-    // const { data } = await useFetch('/api/v1/gacha', {
-    //   method: 'get',
-    //   body: {
-    //     types: types.value.length === 0 ? [0, 1] : types.value,
-    //     from: from.value + ' 00:00' ,
-    //     to: to.value + ' 23:59',
-    //     tags: selectedTags.value
-    //   },
-    //   headers: useRequestHeaders(['cookie']),
-    // })
-    // return navigateTo({
-    //   path: '/gacha/result',
-    //   query: { id: data.id, name: data.name }
-    // })
+    return navigateTo({
+      path: '/gacha/result',
+      // TODO: 一旦1件目を出しておく
+      query: { id: data.value[0].id, name: data.value[0].name }
+    })
   }
 }
 </script>

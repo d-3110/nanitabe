@@ -16,5 +16,6 @@ export default defineNuxtConfig({
       },
     },
   },
+  build: { transpile: ['@vee-validate/rules'] }
 });
 

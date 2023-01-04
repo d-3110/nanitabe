@@ -1,18 +1,26 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { object } from 'yup'
 
 export default eventHandler(async (event) => {
-  const params = await readBody(event)
   const client = serverSupabaseClient(event)
+  const query = getQuery(event)
   // 履歴から除外期間の結果を取得
-  // const { mealIds } = await client.from('histories')
-  // .select('meal_id')
-  // .gte('created_at', params.from)
-  // .lte('created_at', params.to)
+  // const { histories } = await client.from('histories')
+  // .select('')
+  // .gte('created_at', query.from)
+  // .lte('created_at', query.to)
+  // console.log(histories)
+  // let mealIds :Array<number> = []
+  // if (histories.length > 0) {
+  //   histories.forEach((history :any) => {
+  //     mealIds.push(history.meal_id)
+  //   })
+  // }
 
-  // const { meals } = await client.from('meals')
-  // .select('id', 'name')
-  // .in('type', params.types)
-  // .contained('tag', params.tags)
-console.log('結果')
-console.log(params)
+  const { data } = await client.from('meals')
+  .select('id, name, tag')
+  .in('type', Array.isArray(query.types) ? query.types : [query.types])
+  .contains('tag', Array.isArray(query.tags) ? query.tags : [query.tags])
+  // console.log(data)
+  return data
 })
