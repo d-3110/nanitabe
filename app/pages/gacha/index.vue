@@ -48,22 +48,36 @@ const formatDate = (dt :Date) => {
   var d = ('00' + dt.getDate()).slice(-2);
   return (y + '-' + m + '-' + d);
 }
+const { test } = await useFetch('/api/v1/gacha', {
+  headers: useRequestHeaders(['cookie'])
+})
 const submit = async () => {
   const result = await validate()
   if (result.valid) {
     buttonDisabled.value = true
+    console.log('api叩くよ')
     const { data } = await useFetch('/api/v1/gacha', {
-      params: { types: types.value, from: from.value, to: to.value, tags: selectedTags.value },
+      headers: useRequestHeaders(['cookie'])
     })
-    return navigateTo({
-      path: '/gacha/result',
-      query: { id: data.id, name: data.name }
-    })
+    // const { data } = await useFetch('/api/v1/gacha', {
+    //   method: 'get',
+    //   body: {
+    //     types: types.value.length === 0 ? [0, 1] : types.value,
+    //     from: from.value + ' 00:00' ,
+    //     to: to.value + ' 23:59',
+    //     tags: selectedTags.value
+    //   },
+    //   headers: useRequestHeaders(['cookie']),
+    // })
+    // return navigateTo({
+    //   path: '/gacha/result',
+    //   query: { id: data.id, name: data.name }
+    // })
   }
 }
 </script>
 <template>
-  <form class="prose">
+  <div class="prose">
     <div class="flex">
       <div class="mr-4">
         <label for="type_in" class="label-text mr-2">家</label>
@@ -111,5 +125,5 @@ const submit = async () => {
     <div class="flex justify-center items-center mt-4">
       <button @click="submit" class="btn btn-lg btn-primary w-full" :disabled="isDisabled || buttonDisabled">ガチャガチャ</button>
     </div>
-  </form>
+  </div>
 </template>
