@@ -65,7 +65,7 @@ const register = async () => {
         <button @click="login" class="btn btn-lg btn-primary w-full" type="button" :disabled="isDisabled">
           Login
         </button>
-        <button @click="register" class="btn btn-lg btn-primary w-full" type="button">register</button>
+        <!-- <button @click="register" class="btn btn-lg btn-primary w-full" type="button">register</button> -->
       </form>
     </LoginCard>
     <div v-if="isError" class="alert alert-error shadow-lg mt-4 min-h-full sm:px-6 lg:px-8 w-96">
