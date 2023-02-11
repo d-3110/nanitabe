@@ -1,4 +1,5 @@
-<script setup>
+<script setup lang="ts">
+const openMenu = ref<Boolean>(true)
 const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 const logout = async () => {
@@ -10,20 +11,28 @@ const logout = async () => {
   return navigateTo('/')
 }
 const navigation = [
-  { name: 'ホーム', href: '/' },
+  { name: 'ガチャ', href: '/gacha' },
   { name: '食事追加', href: '/meals/add' },
+  { name: '食事一覧', href: '/meals' },
+  { name: '履歴一覧', href: '/histories' },
 ]
+const handleLink = () => {
+  openMenu.value = false
+}
+const toggleMenu = () => {
+  openMenu.value = !openMenu.value
+}
 </script>
 <template>
   <div class="navbar bg-neutral text-neutral-content rounded-full">
     <div class="navbar-start">
       <div class="dropdown">
-        <label tabindex="0" class="btn btn-ghost btn-circle">
+        <label tabindex="0" class="btn btn-ghost btn-circle" @click="toggleMenu">
           <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" icon="burger"/>
         </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <ul v-show="openMenu" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li v-for="item in navigation" :key="item.name">
-            <nuxt-link :to="item.href">
+            <nuxt-link :to="item.href" @click="handleLink">
               {{ item.name }}
             </nuxt-link>
           </li>

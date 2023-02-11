@@ -5,7 +5,7 @@ export default eventHandler(async (event) => {
   const mealClient = serverSupabaseClient(event)
   const historyClient = serverSupabaseClient(event)
   const query = getQuery(event)
-  const mealIds = await getRejectMealIds(historyClient, query.from, query.to)
+  const mealIds = query.isReject ? [] : await getRejectMealIds(historyClient, query.from, query.to)
   let meals: any
   if (mealIds.length > 0) {
     const { data } = await mealClient.from('meals')

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 interface Props {
   headers: Array<string>;
-  data: Array<object>;
+  records: Array<object>;
 }
 const props = withDefaults(defineProps<Props>(), {
   headers: () => ['id', 'name', 'created'],
-  data: () => [{ id: 1, name: '名前', created: '2022-12-01' }]
+  records: () => [{ id: 1, name: '名前', created: '2022-12-01' }]
 })
 </script>
 <template>
@@ -17,8 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="line in data">
-          <td v-for="item in line">{{ item }}</td> 
+        <tr v-for="record in records">
+          <td v-for="item in record">{{ item }}</td> 
         </tr>
       </tbody>
     </table>

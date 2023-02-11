@@ -11,7 +11,9 @@ const schema = object({
 })
 const { validate, resetForm } = useForm({ validationSchema: schema })
 const { value: from, errorMessage: fromError } = useField<string>('from')
-  const { value: to, errorMessage: toError } = useField<string>('to')
+const { value: to, errorMessage: toError } = useField<string>('to')
+const tmpFrom = ref<string>('')
+const tmpTo = ref<string>('')
 
 const { data: tags } = await useFetch('/api/v1/tag', {
   headers: useRequestHeaders(['cookie'])
@@ -19,6 +21,7 @@ const { data: tags } = await useFetch('/api/v1/tag', {
 const types = ref<Array<Number>>([0, 1])
 const selectedTags = ref<Array<Number>>([])
 const buttonDisabled = ref<Boolean>(false)
+const isReject = ref<boolean>(true)
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
@@ -36,17 +39,26 @@ const options = computed(() => {
 
 onMounted(() => {
   // set default Date
+  setDefaultDate()
+  tmpFrom.value = from.value
+  tmpTo.value = to.value
+})
+const setDefaultDate = () => {
   var today = new Date()
   var oneWeekBefore = new Date()
   oneWeekBefore.setDate(oneWeekBefore.getDate() - 7)
   from.value = formatDate(oneWeekBefore)
   to.value = formatDate(today)
-})
-const formatDate = (dt :Date) => {
-  var y = dt.getFullYear();
-  var m = ('00' + (dt.getMonth()+1)).slice(-2);
-  var d = ('00' + dt.getDate()).slice(-2);
-  return (y + '-' + m + '-' + d);
+}
+const changeIsReject = () => {
+  if (isReject.value) {
+    from.value = tmpFrom.value
+    to.value = tmpTo.value
+  } else {
+    tmpFrom.value = from.value
+    tmpTo.value = to.value
+    setDefaultDate()
+  }
 }
 const submit = async () => {
   const result = await validate()
@@ -55,6 +67,7 @@ const submit = async () => {
     const { data } = await useFetch('/api/v1/gacha', {
       params: {
         types: types.value.length === 0 ? [0, 1] : types.value,
+        isReject: isReject.value,
         from: from.value + ' 00:00' ,
         to: to.value + ' 23:59',
         tags: selectedTags.value
@@ -80,7 +93,11 @@ const submit = async () => {
         <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox" />
       </div>
     </div>
-    <div>
+    <div class="flex mt-4">
+      <label for="is_reject" class="label-text mr-2">除外期間設定</label>
+      <input @change="changeIsReject" id="is_reject" type="checkbox" v-model="isReject" class="toggle" />
+    </div>
+    <div v-if="isReject">
       <div class="flex items-center mt-4">
         <input
           type="date"

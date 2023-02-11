@@ -42,8 +42,6 @@ const login = async () => {
       navigateTo('/gacha')
     }
   }
-  // Git Hub
-  // await auth.signInWithOAuth({ provider: 'github' })
 }
 
 // 登録用
