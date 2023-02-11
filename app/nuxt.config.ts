@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        "data-theme": "cupcake",
+        "data-theme": "retro",
       },
     },
   },
