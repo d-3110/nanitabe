@@ -63,8 +63,7 @@ const submit = async () => {
     })
     return navigateTo({
       path: '/gacha/result',
-      // TODO: 一旦1件目を出しておく
-      query: { id: data.value[0].id, name: data.value[0].name }
+      query: { id: data.value.id, name: data.value.name }
     })
   }
 }

@@ -1,8 +1,11 @@
 <script setup>
 const user = useSupabaseUser()
-const client = useSupabaseClient()
+const { auth } = useSupabaseClient()
 const logout = async () => {
-  await client.auth.signOut()
+  const { error } = await auth.signOut()
+  if (error) {
+    console.log(error)
+  }
   user.value = null
   return navigateTo('/')
 }
@@ -20,9 +23,9 @@ const navigation = [
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li v-for="item in navigation" :key="item.name">
-            <a :href="item.href">
+            <nuxt-link :to="item.href">
               {{ item.name }}
-            </a>
+            </nuxt-link>
           </li>
         </ul>
       </div>
