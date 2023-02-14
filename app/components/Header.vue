@@ -20,7 +20,9 @@ const handleLink = () => {
   openMenu.value = false
 }
 const toggleMenu = () => {
-  openMenu.value = !openMenu.value
+  if (!openMenu.value) {
+    openMenu.value = true
+  }
 }
 </script>
 <template>
@@ -31,7 +33,7 @@ const toggleMenu = () => {
           <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" icon="burger"/>
         </label>
         <ul v-show="openMenu" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-          <li v-for="item in navigation" :key="item.name">
+          <li v-for="item in navigation" :key="item.name" class="text-primary">
             <nuxt-link :to="item.href" @click="handleLink">
               {{ item.name }}
             </nuxt-link>
