@@ -5,23 +5,16 @@ export default eventHandler(async (event) => {
   const mealClient = serverSupabaseClient(event)
   const historyClient = serverSupabaseClient(event)
   const query = getQuery(event)
-  const mealIds = query.isReject ? [] : await getRejectMealIds(historyClient, query.from, query.to)
-  let meals: any
+  const mealIds = query.isReject == 'true' ? await getRejectMealIds(historyClient, query.from, query.to) : []
+  let mealQuery = mealClient.from('meals')
+                        .select('id, name, tag')
+                        .in('type', Array.isArray(query.types) ? query.types : [query.types])
+                        .contains('tag', Array.isArray(query.tags) ? query.tags : [query.tags])
   if (mealIds.length > 0) {
-    const { data } = await mealClient.from('meals')
-                    .select('id, name, tag')
-                    .in('type', Array.isArray(query.types) ? query.types : [query.types])
-                    .not('id', 'in', '('+ mealIds.join(',') +')')
-                    .contains('tag', Array.isArray(query.tags) ? query.tags : [query.tags])
-    meals = data
-  } else {
-    const { data } = await mealClient.from('meals')
-                    .select('id, name, tag')
-                    .in('type', Array.isArray(query.types) ? query.types : [query.types])
-                    .contains('tag', Array.isArray(query.tags) ? query.tags : [query.tags])
-    meals = data
+    mealQuery = mealQuery.not('id', 'in', '('+ mealIds.join(',') +')')
   }
-  return meals[_.random(0, meals.length - 1)]
+  const { data } = await mealQuery
+  return data[_.random(0, data.length - 1)]
 })
 
 const getRejectMealIds = async (client: any, from: any, to: any) => {
