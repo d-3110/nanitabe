@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
+import { object, string } from 'yup'
 definePageMeta({
   middleware: 'auth'
 })
-
-import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
-import { object, string } from 'yup'
 
 const schema = object({
   name: string().required('名前は入れてちょうだい')

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
+import { object, string } from 'yup'
 definePageMeta({
   middleware: 'auth'
 })
-import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
-import { object, string } from 'yup'
 
 const schema = object({
   from: string().required('fromは必須'),
@@ -45,8 +45,8 @@ const setDefaultDate = () => {
   var today = new Date()
   var oneWeekBefore = new Date()
   oneWeekBefore.setDate(oneWeekBefore.getDate() - 7)
-  from.value = formatDate(oneWeekBefore)
-  to.value = formatDate(today)
+  from.value = formatDate(oneWeekBefore, false)
+  to.value = formatDate(today, false)
 }
 const changeIsReject = () => {
   if (isReject.value) {
@@ -69,8 +69,7 @@ const submit = async () => {
         from: from.value + ' 00:00' ,
         to: to.value + ' 23:59',
         tags: selectedTags.value
-      },
-      headers: useRequestHeaders(['cookie']),
+      }
     })
     return navigateTo({
       path: '/gacha/result',

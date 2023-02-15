@@ -3,13 +3,12 @@ import { defineNuxtConfig } from "nuxt/config";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr: true,
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase', 'nuxt-lodash'],
   css: [
     '@/assets/styles/tailwind.css',
     '@/assets/styles/main.css',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
-  // plugins: ['@/plugins/fontawesome.ts'],
   app: {
     head: {
       title: "なにたべ",

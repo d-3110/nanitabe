@@ -11,9 +11,12 @@ export default eventHandler(async (event) => {
                         .in('type', Array.isArray(query.types) ? query.types : [query.types])
                         .contains('tag', Array.isArray(query.tags) ? query.tags : [query.tags])
   if (mealIds.length > 0) {
-    mealQuery = mealQuery.not('id', 'in', '('+ mealIds.join(',') +')')
+    mealQuery = mealQuery.not('id', 'in', '(' + mealIds.join(',') + ')')
   }
   const { data } = await mealQuery
+  if (data == null) {
+    return {}
+  }
   return data[_.random(0, data.length - 1)]
 })
 

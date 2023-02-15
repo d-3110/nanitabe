@@ -18,9 +18,10 @@ const { auth } = useSupabaseClient()
 watchEffect(async () => {
   const session = await auth.getSession()
   if (session.data.session && user.value) {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     navigateTo('/gacha')
   }
-})
+}, { flush: 'sync' })
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
