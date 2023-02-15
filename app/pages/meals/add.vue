@@ -12,9 +12,7 @@ const schema = object({
 const { validate, resetForm } = useForm({ validationSchema: schema })
 const { value: name, errorMessage: nameError } = useField<string>('name')
 
-const { data: tags } = await useFetch('/api/v1/tag', {
-  headers: useRequestHeaders(['cookie'])
-})
+const { data: tags } = await useFetch('/api/v1/tag')
 
 const isModal = ref<Boolean>(false)
 const buttonDisabled = ref<Boolean>(false)

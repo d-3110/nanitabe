@@ -15,9 +15,7 @@ const { value: to, errorMessage: toError } = useField<string>('to')
 const tmpFrom = ref<string>('')
 const tmpTo = ref<string>('')
 
-const { data: tags } = await useFetch('/api/v1/tag', {
-  headers: useRequestHeaders(['cookie'])
-})
+const { data: tags } = await useFetch('/api/v1/tag')
 const types = ref<Array<Number>>([0, 1])
 const selectedTags = ref<Array<Number>>([])
 const buttonDisabled = ref<Boolean>(false)
