@@ -1,11 +1,11 @@
 <script setup lang="ts">
 interface Props {
-  headers: Array<string>;
-  records: Array<object>;
+  headers: Array<string>
+  records: Array<object>
 }
 const props = withDefaults(defineProps<Props>(), {
-  headers: () => ['id', 'name', 'created'],
-  records: () => [{ id: 1, name: '名前', created: '2022-12-01' }]
+  headers: () => [],
+  records: () => []
 })
 </script>
 <template>
@@ -18,7 +18,14 @@ const props = withDefaults(defineProps<Props>(), {
       </thead>
       <tbody>
         <tr v-for="record in records">
-          <td v-for="item in record">{{ item }}</td> 
+          <td v-for="item in record">
+            <nuxt-link v-if="'link' in item" :to="item.link" class="link link-primary">
+              {{ item.value }}
+            </nuxt-link>
+            <span v-else>
+              {{ item.value }}
+            </span>
+          </td> 
         </tr>
       </tbody>
     </table>

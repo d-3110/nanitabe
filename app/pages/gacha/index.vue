@@ -18,6 +18,7 @@ const tmpTo = ref<string>('')
 const { data: tags } = await useFetch('/api/v1/tag')
 const types = ref<Array<Number>>([0, 1])
 const selectedTags = ref<Array<Number>>([])
+const isTagAnd = ref<Boolean>(false)
 const buttonDisabled = ref<Boolean>(false)
 const isReject = ref<boolean>(true)
 
@@ -28,11 +29,7 @@ const isDisabled = computed(() => {
 })
 
 const options = computed(() => {
-  let result = <Array<String>>([])
-  tags!.value.forEach((tag :any) => {
-    result.push(tag.name)
-  })
-  return result
+  return makeTagOptions(tags.value)
 })
 
 onMounted(() => {
@@ -68,7 +65,8 @@ const submit = async () => {
         isReject: isReject.value,
         from: from.value + ' 00:00' ,
         to: to.value + ' 23:59',
-        tags: selectedTags.value
+        tags: selectedTags.value,
+        isTagAnd: isTagAnd.value
       }
     })
     return navigateTo({
@@ -90,7 +88,7 @@ const submit = async () => {
         <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox" />
       </div>
     </div>
-    <div class="flex mt-4">
+    <div class="flex mt-4 mb-2">
       <label for="is_reject" class="label-text mr-2">除外期間設定</label>
       <input @change="changeIsReject" id="is_reject" type="checkbox" v-model="isReject" class="toggle" />
     </div>
@@ -119,14 +117,16 @@ const submit = async () => {
         <small v-if="toError"><span class="text-error">{{ toError }}</span></small>
       </label>
     </div>
-    <div>
-      <label>タグ</label>
+    <div class="flex items-center">
       <v-select
         class="flex justify-center items-center input input-bordered w-full max-w-xs"
         v-model="selectedTags"
         :options="options"
         multiple
+        placeholder="タグ"
       />
+      <label for="type_in" class="label-text mx-2">AND</label>
+        <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox" />
     </div>
     <div class="flex justify-center items-center mt-4">
       <button @click="submit" class="btn btn-lg btn-primary w-full" :disabled="isDisabled || buttonDisabled">ガチャガチャ</button>

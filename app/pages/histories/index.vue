@@ -9,7 +9,10 @@ const records = computed(() => {
   let result = <Array<object>>([])
   histories!.value.forEach((history :any) => {
     const date = formatDate(new Date(history.created_at), true)
-    result.push({ date: date, meal: history.meals.name })
+    result.push({
+      date: { value: date },
+      meal: { value: history.meals.name }
+    })
   })
   return result
 })

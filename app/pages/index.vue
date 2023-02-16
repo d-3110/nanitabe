@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
+import { object, string } from 'yup'
 definePageMeta({
   layout: false,
 })
 
-import { useForm, useField, useIsFormDirty, useIsFormValid } from 'vee-validate'
-import { object, string } from 'yup'
 const schema = object({
   email: string().required('メアド入れてちょうだい'),
   password: string().required('password入れてちょうだい')
@@ -18,7 +18,6 @@ const { auth } = useSupabaseClient()
 watchEffect(async () => {
   const session = await auth.getSession()
   if (session.data.session && user.value) {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     navigateTo('/gacha')
   }
 }, { flush: 'sync' })

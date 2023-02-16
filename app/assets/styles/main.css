@@ -9,5 +9,6 @@
   margin: 0 !important;
 }
 
-.vs__selected {
+.v-select  input.vs__search {
+  color: #6B7280;
 }

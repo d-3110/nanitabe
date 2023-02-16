@@ -25,11 +25,7 @@ const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value;
 })
 const options = computed(() => {
-  let result = <Array<String>>([])
-  tags!.value.forEach((tag :any) => {
-    result.push(tag.name)
-  })
-  return result
+  return makeTagOptions(tags.value)
 })
 
 const submit = async () => {
@@ -77,13 +73,13 @@ const onCloseModal = () => {
         <textarea v-model="note" class="textarea textarea-bordered w-full" placeholder="メモ"></textarea>
       </div>
       <div>
-        <label>タグ</label>
         <v-select
           class="flex justify-center items-center input input-bordered w-full max-w-xs"
           v-model="selectedTags"
           :options="options"
           multiple
           taggable
+          placeholder="タグ"
         />
       </div>
       <div class="flex justify-center items-center mt-4">

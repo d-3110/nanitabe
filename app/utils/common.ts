@@ -1,3 +1,5 @@
+import { array } from "yup"
+
 export const formatDate = (dt :Date, withTime :boolean) => {
   let y = dt.getFullYear()
   let m = ('00' + (dt.getMonth()+1)).slice(-2)
@@ -12,4 +14,12 @@ export const formatDate = (dt :Date, withTime :boolean) => {
 }
 export const convertMealType = (mealType :Number) => {
   return mealType == 0 ? '家' : '外'
+}
+
+export const makeTagOptions = (tags :Array<any>) => {
+  let result = <Array<String>>([])
+  tags.forEach((tag :any) => {
+    result.push(tag.name)
+  })
+  return result
 }
