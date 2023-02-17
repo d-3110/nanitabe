@@ -13,14 +13,17 @@ const { validate, resetForm } = useForm({ validationSchema: schema })
 const { value: email, errorMessage: emailError } = useField<string>('email')
 const { value: password, errorMessage: passwordError } = useField<string>('password')
 
+const loading = ref<boolean>(true)
+
 const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 watchEffect(async () => {
   const session = await auth.getSession()
   if (session.data.session && user.value) {
-    navigateTo('/gacha')
+    await navigateTo('/gacha')
   }
-}, { flush: 'sync' })
+  loading.value = false
+})
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
@@ -56,7 +59,8 @@ const register = async () => {
 
 <template>
   <div class="min-h-full flex flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
-    <LoginCard>
+    <Spinner v-if="loading" />
+    <LoginCard v-else="loading">
       <form class="prose">
         <input type="text" v-model="email" placeholder="email" class="input input-bordered w-full max-w-xs mb-2">
         <small v-if="emailError"><span class="text-error">{{ emailError }}</span></small>
