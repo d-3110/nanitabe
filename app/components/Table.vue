@@ -1,11 +1,12 @@
 <script setup lang="ts">
+
 interface Props {
   headers: Array<string>
-  records: Array<object>
+  records: Array<any>
 }
 const props = withDefaults(defineProps<Props>(), {
   headers: () => [],
-  records: () => []
+  records: () => [{}]
 })
 </script>
 <template>
@@ -19,9 +20,9 @@ const props = withDefaults(defineProps<Props>(), {
       <tbody>
         <tr v-for="record in records">
           <td v-for="item in record">
-            <nuxt-link v-if="'link' in item" :to="item.link" class="link link-primary">
+            <NuxtLink v-if="'link' in item" :to="item.link" class="link link-primary">
               {{ item.value }}
-            </nuxt-link>
+            </NuxtLink>
             <span v-else>
               {{ item.value }}
             </span>

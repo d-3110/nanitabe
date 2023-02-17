@@ -34,9 +34,9 @@ const toggleMenu = () => {
         </label>
         <ul v-show="openMenu" tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li v-for="item in navigation" :key="item.name" class="text-primary">
-            <nuxt-link :to="item.href" @click="handleLink">
+            <NuxtLink :to="item.href" @click="handleLink">
               {{ item.name }}
-            </nuxt-link>
+            </NuxtLink>
           </li>
         </ul>
       </div>

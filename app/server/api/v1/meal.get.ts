@@ -1,10 +1,14 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PAGE_SIZE, getStartIndex } from '~~/utils/common'
 
 export default eventHandler(async (event) => {
   const client = serverSupabaseClient(event)
   const params = getQuery(event)
-  let query = client.from('meals').select('*')
-  
+  const startIndex = getStartIndex('page' in params ? Number(params.page) : 1)
+  let query = client.from('meals')
+                    .select('*', { count: 'exact' })
+                    .range(startIndex, startIndex + (PAGE_SIZE - 1))
+
   if ('types' in params) {
     query.in('type', Array.isArray(params.types) ? params.types : [params.types])
   }
@@ -20,6 +24,9 @@ export default eventHandler(async (event) => {
   if ('name' in params) {
     query.like('name', '%' + params.name + '%')
   }
-  const { data } = await query
-  return data
+  const { data, count } = await query
+  return {
+    meals: data != null ? data : [],
+    count: count
+  }
 })

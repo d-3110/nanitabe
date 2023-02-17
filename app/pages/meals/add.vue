@@ -13,16 +13,16 @@ const { value: name, errorMessage: nameError } = useField<string>('name')
 
 const { data: tags } = await useFetch('/api/v1/tag')
 
-const isModal = ref<Boolean>(false)
-const buttonDisabled = ref<Boolean>(false)
+const isModal = ref<boolean>(false)
+const buttonDisabled = ref<boolean>(false)
 const type = ref<Number>(0)
-const note = ref<String>('')
+const note = ref<string>('')
 const selectedTags = ref<Array<Number>>([])
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
 const isDisabled = computed(() => {
-  return !isDirty.value || !isValid.value;
+  return !isDirty.value || !isValid.value || buttonDisabled.value
 })
 const options = computed(() => {
   return makeTagOptions(tags.value)
@@ -65,11 +65,11 @@ const onCloseModal = () => {
       </div>
       <div class="mt-4">
         <input v-model="name" type="text" placeholder="食事名" class="input input-bordered w-full max-w-xs" />
-        <label class="label">
-          <small v-if="nameError"><span class="text-error">{{ nameError }}</span></small>
+        <label v-if="nameError" class="label">
+          <small><span class="text-error">{{ nameError }}</span></small>
         </label>
       </div>
-      <div class="mt-4">
+      <div class="mt-2">
         <textarea v-model="note" class="textarea textarea-bordered w-full" placeholder="メモ"></textarea>
       </div>
       <div>
@@ -83,7 +83,7 @@ const onCloseModal = () => {
         />
       </div>
       <div class="flex justify-center items-center mt-4">
-        <button @click="submit" class="btn btn-lg btn-primary w-full" type="button" :disabled="isDisabled || buttonDisabled">登録</button>
+        <button @click="submit" class="btn btn-lg btn-primary w-full" type="button" :disabled="isDisabled">登録</button>
       </div>
     </form>
   </div>

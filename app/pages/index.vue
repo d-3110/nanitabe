@@ -27,8 +27,8 @@ const isValid = useIsFormValid();
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value;
 })
+const loginError = ref<boolean>(false)
 
-const isError = ref<Boolean>(false)
 const login = async () => {
   const result = await validate()
   if (result.valid) {
@@ -37,7 +37,7 @@ const login = async () => {
       password: password.value,
     })
     if (error) {
-      isError.value = true
+      loginError.value = true
     } else {
       navigateTo('/gacha')
     }
@@ -68,7 +68,7 @@ const register = async () => {
         <!-- <button @click="register" class="btn btn-lg btn-primary w-full" type="button">register</button> -->
       </form>
     </LoginCard>
-    <div v-if="isError" class="alert alert-error shadow-lg mt-4 min-h-full sm:px-6 lg:px-8 w-96">
+    <div v-if="loginError" class="alert alert-error shadow-lg mt-4 min-h-full sm:px-6 lg:px-8 w-96">
       <div>
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Error!</span>

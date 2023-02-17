@@ -1,18 +1,19 @@
 <script setup lang="ts">
-
 definePageMeta({
   middleware: 'auth'
 })
-const buttonDisabled = ref<Boolean>(false)
+const buttonDisabled = ref<boolean>(false)
 const { data: tags } = await useFetch('/api/v1/tag')
 const types = ref<Array<Number>>([0, 1])
 const selectedTags = ref<Array<Number>>([])
-const isTagAnd = ref<Boolean>(false)
+const isTagAnd = ref<boolean>(false)
 const name = ref<string>('')
 const meals = ref<Array<any>>([])
+const route = useRoute()
+const page = ref<number>('page' in route.query ? Number(route.query.page) : 1)
+const pages = ref<number>(0)
 
 onMounted(async () => {
-  console.log('mounted')
   await search()
 })
 
@@ -22,7 +23,7 @@ const records = computed(() => {
   meals.value.forEach((meal :any) => {
     const type = convertMealType(meal.type)
     result.push({
-      name: { value: meal.name, link: 'meals/' + meal.id }, 
+      name: { value: meal.name, link: 'meals/' + meal.id },
       type: { value: type },
       tag: { value: meal.tag }
     })
@@ -41,12 +42,21 @@ const search = async () => {
       types: types.value.length === 0 ? [0, 1] : types.value,
       tags: selectedTags.value,
       isTagAnd: isTagAnd.value,
-      name: name.value
+      name: name.value,
+      page: page.value
     }
   })
-  meals.value = data.value
+  meals.value = data.value.meals
+  pages.value = Math.floor(data.value.count / PAGE_SIZE)
   buttonDisabled.value = false
 }
+
+onBeforeRouteUpdate(async (to, _from, next) => {
+  // クエリだけ変更してもページの再レンダリングが走らないため、データを再取得する
+  page.value = Number(to.query.page)
+  await search()
+  next()
+})
 </script>
 <template>
   <div>
@@ -72,7 +82,7 @@ const search = async () => {
         <label for="type_in" class="label-text mx-2">AND</label>
         <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox" />
       </div>
-      <div class="flex mb-6">
+      <div class="flex mb-4">
         <input
           type="text"
           v-model="name"
@@ -86,5 +96,10 @@ const search = async () => {
     </form>
     <div class="divider"></div>
     <Table :headers="headers" :records="records" />
+    <Pagination
+      :pages="pages"
+      :current="page"
+      :url="route.path"
+    />
   </div>
 </template>

@@ -1,5 +1,7 @@
-import { array } from "yup"
-
+export const PAGE_SIZE = 30
+export const getStartIndex = (page: number) => {
+  return (page - 1) * PAGE_SIZE
+}
 export const formatDate = (dt :Date, withTime :boolean) => {
   let y = dt.getFullYear()
   let m = ('00' + (dt.getMonth()+1)).slice(-2)
@@ -12,6 +14,7 @@ export const formatDate = (dt :Date, withTime :boolean) => {
   }
   return result;
 }
+
 export const convertMealType = (mealType :Number) => {
   return mealType == 0 ? '家' : '外'
 }
@@ -22,4 +25,14 @@ export const makeTagOptions = (tags :Array<any>) => {
     result.push(tag.name)
   })
   return result
+}
+
+export const getDefaultDate = () => {
+  var today = new Date()
+  var oneWeekBefore = new Date()
+  oneWeekBefore.setDate(oneWeekBefore.getDate() - 7)
+  return {
+    from: formatDate(oneWeekBefore, false),
+    to: formatDate(today, false)
+  }
 }

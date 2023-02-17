@@ -5,7 +5,7 @@ export default eventHandler(async (event) => {
   const mealClient = serverSupabaseClient(event)
   const historyClient = serverSupabaseClient(event)
   const params = getQuery(event)
-  const mealIds = params.isReject == 'true' ? await getRejectMealIds(historyClient, params.from, params.to) : []
+  const mealIds = params.isAll == 'false' ? await getRejectMealIds(historyClient, params.from, params.to) : []
   let query = mealClient.from('meals')
                         .select('id, name, tag')
                         .in('type', Array.isArray(params.types) ? params.types : [params.types])
