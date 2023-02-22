@@ -89,6 +89,50 @@ const search = async () => {
   buttonDisabled.value = false
 }
 
+const checkedList = ref<Array<number>>([])
+const onCheck = (check: any) => {
+  if (Array.isArray(check)) {
+    checkedList.value = check
+    return
+  }
+  if (checkedList.value.includes(check)) {
+    checkedList.value = checkedList.value.filter((checked: number) => {
+      return checked !== check
+    })
+  } else {
+    checkedList.value.push(check)
+  }
+}
+
+const onBulkDelete = async () => {
+  isModal.value = true
+}
+
+const execDelete = async () => {
+  let ids: Array<number> = []
+  histories.value.forEach((history :any, index) => {
+    if (checkedList.value.includes(index)) {
+      ids.push(history.id)
+    }
+  })
+  const { data } = await useFetch('/api/v1/history', {
+    method: 'delete',
+    body: { ids: ids },
+  })
+}
+
+const isModal = ref<boolean>(false)
+const modalLoading = ref<boolean>(false)
+const onCloseModal = async (ok: boolean) => {
+  if (ok) {
+    modalLoading.value = true
+    await execDelete()
+    await search()
+    modalLoading.value = false
+  }
+  isModal.value = false
+}
+
 onBeforeRouteUpdate(async (to, _from, next) => {
   // クエリだけ変更してもページの再レンダリングが走らないため、データを再取得する
   page.value = Number(to.query.page)
@@ -98,6 +142,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
 </script>
 <template>
   <div>
+    <Confirm :onCloseModal="onCloseModal" :open="isModal" message="削除してもいい？" :loading="modalLoading"/>
     <form class="prose mb-5">
       <div class="flex mt-4 mb-2">
         <label for="is_all" class="label-text mr-2">全期間</label>
@@ -133,7 +178,13 @@ onBeforeRouteUpdate(async (to, _from, next) => {
       </button>
     </form>
     <div class="divider"></div>
-    <Table :headers="headers" :records="records" />
+    <Table
+      :headers="headers"
+      :records="records"
+      :with-check-box="true"
+      :handle-check="onCheck"
+      :handle-bulk-submit="onBulkDelete"
+    />
     <Pagination
       :pages="pages"
       :current="page"
