@@ -24,7 +24,7 @@ export default eventHandler(async (event) => {
   if ('name' in params) {
     query.like('name', '%' + params.name + '%')
   }
-  const { data, count } = await query
+  const { data, count } = await query.order('id', { ascending: true })
   return {
     meals: data != null ? data : [],
     count: count
