@@ -1,3 +1,5 @@
+import { setTimeout } from 'awaitable-timers'
+
 export const PAGE_SIZE = 30
 export const getStartIndex = (page: number) => {
   return (page - 1) * PAGE_SIZE
@@ -38,6 +40,14 @@ export const getDefaultDate = () => {
 }
 
 export const knock = async () => {
-  const { data } = await useFetch('/api/v1/knock')
-  console.log(data.value)
+  await useFetch('/api/v1/knock')
+  while (true) {
+    console.log('loop')
+    const { data } = await useFetch('/api/v1/tag')
+    if (data.value.length > 0) {
+      console.log('ok')
+      break;
+    }
+    await setTimeout(30000) // 30秒ごと
+  }
 }

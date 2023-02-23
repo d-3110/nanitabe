@@ -18,9 +18,7 @@ const loading = ref<boolean>(true)
 const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 watchEffect(async () => {
-  console.log('セッション取りに行く')
   const session = await auth.getSession()
-  console.log(session)
   if (session.data.session && user.value) {
     await navigateTo('/gacha')
   }
@@ -46,8 +44,7 @@ const login = async () => {
     if (error) {
       loginError.value = true
     } else {
-      console.log('ろぐいん')
-      console.log(data.user)
+      loading.value = true
       await knock()
       navigateTo('/gacha')
     }
