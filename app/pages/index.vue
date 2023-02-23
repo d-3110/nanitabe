@@ -18,7 +18,9 @@ const loading = ref<boolean>(true)
 const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 watchEffect(async () => {
+  console.log('セッション取りに行く')
   const session = await auth.getSession()
+  console.log(session)
   if (session.data.session && user.value) {
     await navigateTo('/gacha')
   }
@@ -27,12 +29,14 @@ watchEffect(async () => {
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
+const buttonDisabled = ref<boolean>(false)
 const isDisabled = computed(() => {
-  return !isDirty.value || !isValid.value;
+  return !isDirty.value || !isValid.value || buttonDisabled.value
 })
 const loginError = ref<boolean>(false)
 
 const login = async () => {
+  buttonDisabled.value = true
   const result = await validate()
   if (result.valid) {
     const { data, error } = await auth.signInWithPassword({
@@ -42,8 +46,12 @@ const login = async () => {
     if (error) {
       loginError.value = true
     } else {
+      console.log('ろぐいん')
+      console.log(data.user)
+      await knock()
       navigateTo('/gacha')
     }
+    buttonDisabled.value = false
   }
 }
 

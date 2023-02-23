@@ -36,3 +36,8 @@ export const getDefaultDate = () => {
     to: formatDate(today, false)
   }
 }
+
+export const knock = async () => {
+  const { data } = await useFetch('/api/v1/knock')
+  console.log(data.value)
+}
