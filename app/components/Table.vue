@@ -3,10 +3,10 @@
 interface Props {
   headers: Array<string>
   records: Array<any>
-  withCheckBox: boolean
-  handleCheck: Function
-  handleBulkSubmit: Function
-  bulkSubmitButton: string
+  withCheckBox?: boolean
+  handleCheck?: Function
+  handleBulkSubmit?: Function
+  bulkSubmitButton?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   headers: () => [],

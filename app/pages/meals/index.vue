@@ -47,7 +47,7 @@ const search = async () => {
     }
   })
   meals.value = data.value.meals
-  pages.value = Math.floor(data.value.count / PAGE_SIZE)
+  pages.value = Math.ceil(data.value.count / PAGE_SIZE)
   buttonDisabled.value = false
 }
 
