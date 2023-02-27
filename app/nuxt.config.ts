@@ -17,8 +17,10 @@ export default defineNuxtConfig({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-        { rel: "apple-touch-icon", sizes: "152x152", href: "/apple-touch-icon.png" },
+        // { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        // { rel: "apple-touch-icon", sizes: "152x152", href: "/apple-touch-icon.png" },
+        { rel: "icon", type: "image/x-icon", href: "/test.png" },
+        { rel: "apple-touch-icon", sizes: "152x152", href: "/test.png" },
       ],
       htmlAttrs: {
         "data-theme": "retro",
