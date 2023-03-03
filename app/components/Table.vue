@@ -14,7 +14,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   headers: () => [],
   records: () => [{}],
-  tagColors: { タグA: '#50d71e' },
+  tagColors: {},
   withCheckBox: false,
   handleCheck: () => {},
   handleBulkSubmit: () => {},

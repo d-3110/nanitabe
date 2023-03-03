@@ -34,6 +34,9 @@ const records = computed(() => {
 const options = computed(() => {
   return makeTagOptions(tags.value)
 })
+const tagColors = computed(() => {
+  return makeTagColors(tags.value)
+})
 
 const search = async () => {
   buttonDisabled.value = true
@@ -95,7 +98,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
       </button>
     </form>
     <div class="divider"></div>
-    <Table :headers="headers" :records="records" />
+    <Table :headers="headers" :records="records" :tagColors="tagColors"/>
     <Pagination
       :pages="pages"
       :current="page"

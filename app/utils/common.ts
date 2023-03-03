@@ -29,6 +29,14 @@ export const makeTagOptions = (tags :Array<any>) => {
   return result
 }
 
+export const makeTagColors = (tags :Array<any>) => {
+  let result = <Array<any>>([])
+  tags.forEach((tag :any) => {
+    result[tag.name] = tag.color
+  })
+  return result
+}
+
 export const getDefaultDate = () => {
   var today = new Date()
   var oneWeekBefore = new Date()

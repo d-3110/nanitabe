@@ -14,6 +14,7 @@ const schema = object({
         return fromDate <= toDate
       })
 })
+const { data: tags } = await useFetch('/api/v1/tag')
 const { validate, resetForm } = useForm({ validationSchema: schema })
 const { value: from, errorMessage: fromError } = useField<string>('from')
 const { value: to, errorMessage: toError } = useField<string>('to')
@@ -46,7 +47,9 @@ const isValid = useIsFormValid();
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
 })
-
+const tagColors = computed(() => {
+  return makeTagColors(tags.value)
+})
 onMounted(async () => {
   setDefaultDate()
   tmpFrom.value = from.value
@@ -181,6 +184,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
     <Table
       :headers="headers"
       :records="records"
+      :tagColors="tagColors"
       :with-check-box="true"
       :handle-check="onCheck"
       :handle-bulk-submit="onBulkDelete"

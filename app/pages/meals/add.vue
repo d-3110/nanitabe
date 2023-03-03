@@ -56,11 +56,11 @@ const onCloseModal = () => {
       <div class="flex">
         <div class="mr-4">
           <label for="type_in" class="label-text mr-2">家</label>
-          <input v-model="type" id="type_in" value="0" type="radio" class="radio" />
+          <input v-model="type" id="type_in" value="0" type="radio" class="radio radio-secondary" />
         </div>
         <div>
           <label for="type_out" class="label-text mr-2">外</label>
-          <input v-model="type" id="type_out" value="1" type="radio" class="radio" />
+          <input v-model="type" id="type_out" value="1" type="radio" class="radio radio-secondary" />
         </div>
       </div>
       <div class="mt-4">

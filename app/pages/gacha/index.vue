@@ -23,7 +23,7 @@ const tmpTo = ref<string>('')
 
 const { data: tags } = await useFetch('/api/v1/tag')
 const types = ref<Array<Number>>([0, 1])
-const selectedTags = ref<Array<Number>>([])
+const selectedTags = ref<Array<string>>([])
 const isTagAnd = ref<boolean>(false)
 const buttonDisabled = ref<boolean>(false)
 const isAll = ref<boolean>(true)
@@ -79,6 +79,12 @@ const submit = async () => {
     })
   }
 }
+const handleDeleteTag = () => {
+  //
+}
+const handleSelectTag = (value: Array<string>) => {
+  selectedTags.value = value
+}
 </script>
 <template>
   <div class="prose">
@@ -122,13 +128,19 @@ const submit = async () => {
       </label>
     </div>
     <div class="flex items-center">
-      <v-select
+      <SelectTag
+        :selectedTags="selectedTags"
+        :options="options"
+        :handleDelete="handleDeleteTag"
+        :handleInput="handleSelectTag"
+      />
+      <!-- <v-select
         class="flex justify-center items-center input input-bordered w-full max-w-xs"
         v-model="selectedTags"
         :options="options"
         multiple
         placeholder="タグ"
-      />
+      /> -->
       <label for="type_in" class="label-text mx-2">AND</label>
         <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox checkbox-secondary" />
     </div>
