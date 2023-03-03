@@ -146,7 +146,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
     <form class="prose mb-5">
       <div class="flex mt-4 mb-2">
         <label for="is_all" class="label-text mr-2">全期間</label>
-        <input @change="changeIsAll" id="is_all" type="checkbox" v-model="isAll" class="toggle" />
+        <input @change="changeIsAll" id="is_all" type="checkbox" v-model="isAll" class="toggle toggle-secondary" />
       </div>
       <div class="mb-4" v-if="!isAll">
         <div class="flex items-center mt-4">

@@ -25,8 +25,8 @@ watchEffect(async () => {
   loading.value = false
 })
 
-const isDirty = useIsFormDirty();
-const isValid = useIsFormValid();
+const isDirty = useIsFormDirty()
+const isValid = useIsFormValid()
 const buttonDisabled = ref<boolean>(false)
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
@@ -65,7 +65,7 @@ const register = async () => {
 <template>
   <div class="min-h-full flex flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
     <Spinner v-if="loading" />
-    <LoginCard v-else="loading">
+    <LoginCard v-else>
       <form class="prose">
         <input type="text" v-model="email" placeholder="email" class="input input-bordered w-full max-w-xs mb-2">
         <small v-if="emailError"><span class="text-error">{{ emailError }}</span></small>

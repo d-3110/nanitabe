@@ -85,16 +85,16 @@ const submit = async () => {
     <div class="flex">
       <div class="mr-4">
         <label for="type_in" class="label-text mr-2">家</label>
-        <input id="type_in" v-model="types" value="0" type="checkbox" class="checkbox" />
+        <input id="type_in" v-model="types" value="0" type="checkbox" class="checkbox checkbox-secondary" />
       </div>
       <div>
         <label for="type_out" class="label-text mr-2">外</label>
-        <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox" />
+        <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox checkbox-secondary" />
       </div>
     </div>
     <div class="flex mt-4 mb-2">
       <label for="is_all" class="label-text mr-2">除外しない</label>
-      <input @change="changeIsAll" id="is_all" type="checkbox" v-model="isAll" class="toggle" />
+      <input @change="changeIsAll" id="is_all" type="checkbox" v-model="isAll" class="toggle toggle-secondary" />
     </div>
     <div v-if="!isAll">
       <div class="flex items-center mt-4">
@@ -130,7 +130,7 @@ const submit = async () => {
         placeholder="タグ"
       />
       <label for="type_in" class="label-text mx-2">AND</label>
-        <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox" />
+        <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox checkbox-secondary" />
     </div>
     <div class="flex justify-center items-center mt-4">
       <button @click="submit" class="btn btn-lg btn-primary w-full" :disabled="isDisabled">ガチャガチャ</button>

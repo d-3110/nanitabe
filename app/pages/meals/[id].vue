@@ -19,8 +19,8 @@ const type = ref<Number>(0)
 const note = ref<string>('')
 const selectedTags = ref<Array<Number>>([])
 
-const isDirty = useIsFormDirty();
-const isValid = useIsFormValid();
+const isDirty = useIsFormDirty()
+const isValid = useIsFormValid()
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
 })

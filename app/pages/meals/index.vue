@@ -64,11 +64,11 @@ onBeforeRouteUpdate(async (to, _from, next) => {
       <div class="flex mb-2">
         <div class="mr-4">
           <label for="type_in" class="label-text mr-2">家</label>
-          <input id="type_in" v-model="types" value="0" type="checkbox" class="checkbox" />
+          <input id="type_in" v-model="types" value="0" type="checkbox" class="checkbox checkbox-secondary" />
         </div>
         <div>
           <label for="type_out" class="label-text mr-2">外</label>
-          <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox" />
+          <input id="type_out" v-model="types" value="1" type="checkbox" class="checkbox checkbox-secondary" />
         </div>
       </div>
       <div class="flex items-center mb-2">
@@ -80,7 +80,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
           placeholder="タグ"
         />
         <label for="type_in" class="label-text mx-2">AND</label>
-        <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox" />
+        <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox checkbox-secondary" />
       </div>
       <div class="flex mb-4">
         <input

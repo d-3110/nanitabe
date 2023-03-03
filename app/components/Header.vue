@@ -15,6 +15,7 @@ const navigation = [
   { name: '食事追加', href: '/meals/add' },
   { name: '食事一覧', href: '/meals' },
   { name: '履歴一覧', href: '/histories' },
+  { name: 'AIに聞く', href: '/ai' },
 ]
 const handleLink = () => {
   openMenu.value = false

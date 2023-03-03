@@ -16,5 +16,9 @@
       <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" :icon="['fa','clock-rotate-left']" />
       <span class="btm-nav-label">履歴一覧</span>
     </NuxtLink>
+    <NuxtLink to="/ai" class="text-primary" :class="$route.path == '/ai' ? 'active' : ''">
+      <font-awesome-icon class="text-primary block fa-lg" aria-hidden="true" :icon="['fa','brain']" />
+      <span class="btm-nav-label">AIに聞く</span>
+    </NuxtLink>
   </div>
 </template>
