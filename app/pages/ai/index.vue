@@ -37,12 +37,15 @@ const submit = async () => {
   if (result.valid) {
     buttonDisabled.value = true
     addMessage(true, prompt.value)
-    const { data } = await useFetch('/api/v1/ai', {
+    const { data, error } = await useFetch('/api/v1/ai', {
       method: 'POST',
       body: {
         prompt: prompt.value
       }
     })
+    if (error.value) {
+      console.log('ERROR: ', error.value)
+    }
     addMessage(false, data.value.choices[0].text)
     buttonDisabled.value = false
   }
