@@ -1,3 +1,6 @@
+.v-select {
+  min-height: 48px !important;
+}
 .v-select > .vs__dropdown-toggle {
   width: 100%;
   border: none;

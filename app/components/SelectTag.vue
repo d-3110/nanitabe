@@ -23,7 +23,7 @@ const selected = computed({
 </script>
 <template>
   <v-select
-    class="flex justify-center items-center input input-bordered w-full max-w-xs"
+    class="flex justify-center items-center input input-bordered w-full max-w-xs h-auto"
     v-model="selected"
     :options="tags"
     :deselectFromDropdown="true"
