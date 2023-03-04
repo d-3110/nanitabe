@@ -17,7 +17,7 @@ const isModal = ref<boolean>(false)
 const buttonDisabled = ref<boolean>(false)
 const type = ref<Number>(0)
 const note = ref<string>('')
-const selectedTags = ref<Array<Number>>([])
+const selectedTags = ref<Array<any>>([])
 
 const isDirty = useIsFormDirty()
 const isValid = useIsFormValid()
@@ -25,10 +25,6 @@ const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
 })
 const route = useRoute()
-
-const options = computed(() => {
-  return makeTagOptions(tags.value)
-})
 
 onMounted(async () => {
   await fetch()
@@ -40,7 +36,7 @@ const fetch = async () => {
   type.value = meal.type
   name.value = meal.name
   note.value = meal.note
-  selectedTags.value = meal.tag
+  selectedTags.value = convertTagObjects(tags, meal.tag)
 }
 
 const submit = async () => {
@@ -49,7 +45,7 @@ const submit = async () => {
     buttonDisabled.value = true
     const { data } = await useFetch('/api/v1/meal/' + route.params.id, {
       method: 'put',
-      body: { type: type.value, name: name.value, note: note.value, tags: selectedTags.value },
+      body: { type: type.value, name: name.value, note: note.value, tags: convertTagNames(selectedTags.value) },
     })
     isModal.value = true
   }
@@ -60,6 +56,9 @@ const onCloseModal = () => {
   return navigateTo({
     path: '/meals',
   })
+}
+const handleSelectTag = (value: Array<any>) => {
+  selectedTags.value = value
 }
 </script>
 <template>
@@ -87,13 +86,11 @@ const onCloseModal = () => {
         <textarea v-model="note" class="textarea textarea-bordered w-full" placeholder="メモ"></textarea>
       </div>
       <div>
-        <v-select
-          class="flex justify-center items-center input input-bordered w-full max-w-xs"
-          v-model="selectedTags"
-          :options="options"
-          multiple
-          taggable
-          placeholder="タグ"
+        <SelectTag
+          :selectedTags="selectedTags"
+          :tags="tags"
+          :handleInput="handleSelectTag"
+          :taggable="true"
         />
       </div>
       <div class="flex justify-center items-center mt-4">

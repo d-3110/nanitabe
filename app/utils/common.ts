@@ -21,7 +21,16 @@ export const convertMealType = (mealType :Number) => {
   return mealType == 0 ? '家' : '外'
 }
 
-export const makeTagOptions = (tags :Array<any>) => {
+export const convertTagObjects = (tags :Array<any>, tagNames :Array<string>) => {
+  let result = <Array<String>>([])
+  tags.forEach((tag :any) => {
+    if (tagNames.includes(tag.name)) {
+      result.push(tag)
+    }
+  })
+  return result
+}
+export const convertTagNames = (tags :Array<any>) => {
   let result = <Array<String>>([])
   tags.forEach((tag :any) => {
     result.push(tag.name)
@@ -29,10 +38,10 @@ export const makeTagOptions = (tags :Array<any>) => {
   return result
 }
 
-export const makeTagColors = (tags :Array<any>) => {
+export const makeTagInfo = async (tags :Array<any>) => {
   let result = <Array<any>>([])
   tags.forEach((tag :any) => {
-    result[tag.name] = tag.color
+    result[tag.name] = tag
   })
   return result
 }

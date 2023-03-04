@@ -34,10 +34,6 @@ const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
 })
 
-const options = computed(() => {
-  return makeTagOptions(tags.value)
-})
-
 onMounted(() => {
   // set default Date
   setDefaultDate()
@@ -69,7 +65,7 @@ const submit = async () => {
         isAll: isAll.value,
         from: from.value + ' 00:00' ,
         to: to.value + ' 23:59',
-        tags: selectedTags.value,
+        tags: convertTagNames(selectedTags.value),
         isTagAnd: isTagAnd.value
       }
     })
@@ -79,10 +75,7 @@ const submit = async () => {
     })
   }
 }
-const handleDeleteTag = () => {
-  //
-}
-const handleSelectTag = (value: Array<string>) => {
+const handleSelectTag = (value: Array<any>) => {
   selectedTags.value = value
 }
 </script>
@@ -130,17 +123,9 @@ const handleSelectTag = (value: Array<string>) => {
     <div class="flex items-center">
       <SelectTag
         :selectedTags="selectedTags"
-        :options="options"
-        :handleDelete="handleDeleteTag"
+        :tags="tags"
         :handleInput="handleSelectTag"
       />
-      <!-- <v-select
-        class="flex justify-center items-center input input-bordered w-full max-w-xs"
-        v-model="selectedTags"
-        :options="options"
-        multiple
-        placeholder="タグ"
-      /> -->
       <label for="type_in" class="label-text mx-2">AND</label>
         <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox checkbox-secondary" />
     </div>

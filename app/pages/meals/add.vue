@@ -17,15 +17,12 @@ const isModal = ref<boolean>(false)
 const buttonDisabled = ref<boolean>(false)
 const type = ref<Number>(0)
 const note = ref<string>('')
-const selectedTags = ref<Array<Number>>([])
+const selectedTags = ref<Array<any>>([])
 
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value || buttonDisabled.value
-})
-const options = computed(() => {
-  return makeTagOptions(tags.value)
 })
 
 const submit = async () => {
@@ -34,7 +31,7 @@ const submit = async () => {
     buttonDisabled.value = true
     const { data } = await useFetch('/api/v1/meal', {
       method: 'post',
-      body: { type: type.value, name: name.value, note: note.value, tags: selectedTags.value },
+      body: { type: type.value, name: name.value, note: note.value, tags: convertTagNames(selectedTags.value) },
     })
     isModal.value = true
   }
@@ -46,6 +43,9 @@ const onCloseModal = () => {
   name.value = ''
   note.value = ''
   selectedTags.value = []
+}
+const handleSelectTag = (value: Array<any>) => {
+  selectedTags.value = value
 }
 </script>
 <template>
@@ -73,13 +73,11 @@ const onCloseModal = () => {
         <textarea v-model="note" class="textarea textarea-bordered w-full" placeholder="メモ"></textarea>
       </div>
       <div>
-        <v-select
-          class="flex justify-center items-center input input-bordered w-full max-w-xs"
-          v-model="selectedTags"
-          :options="options"
-          multiple
-          taggable
-          placeholder="タグ"
+        <SelectTag
+          :selectedTags="selectedTags"
+          :tags="tags"
+          :handleInput="handleSelectTag"
+          :taggable="true"
         />
       </div>
       <div class="flex justify-center items-center mt-4">

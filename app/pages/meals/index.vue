@@ -4,8 +4,9 @@ definePageMeta({
 })
 const buttonDisabled = ref<boolean>(false)
 const { data: tags } = await useFetch('/api/v1/tag')
+const tagInfo = ref<Array<any>>([])
 const types = ref<Array<Number>>([0, 1])
-const selectedTags = ref<Array<Number>>([])
+const selectedTags = ref<Array<any>>([])
 const isTagAnd = ref<boolean>(false)
 const name = ref<string>('')
 const meals = ref<Array<any>>([])
@@ -15,6 +16,7 @@ const pages = ref<number>(0)
 
 onMounted(async () => {
   await search()
+  tagInfo.value = await makeTagInfo(tags.value)
 })
 
 const headers = ref<Array<string>>(['name', 'type', 'tag'])
@@ -31,19 +33,12 @@ const records = computed(() => {
   return result
 })
 
-const options = computed(() => {
-  return makeTagOptions(tags.value)
-})
-const tagColors = computed(() => {
-  return makeTagColors(tags.value)
-})
-
 const search = async () => {
   buttonDisabled.value = true
   const { data } = await useFetch('/api/v1/meal', {
     params: {
       types: types.value.length === 0 ? [0, 1] : types.value,
-      tags: selectedTags.value,
+      tags: convertTagNames(selectedTags.value),
       isTagAnd: isTagAnd.value,
       name: name.value,
       page: page.value
@@ -52,6 +47,10 @@ const search = async () => {
   meals.value = data.value.meals
   pages.value = Math.ceil(data.value.count / PAGE_SIZE)
   buttonDisabled.value = false
+}
+
+const handleSelectTag = (value: Array<string>) => {
+  selectedTags.value = value
 }
 
 onBeforeRouteUpdate(async (to, _from, next) => {
@@ -75,12 +74,10 @@ onBeforeRouteUpdate(async (to, _from, next) => {
         </div>
       </div>
       <div class="flex items-center mb-2">
-        <v-select
-          class="flex justify-center items-center input input-bordered w-full max-w-xs"
-          v-model="selectedTags"
-          :options="options"
-          multiple
-          placeholder="タグ"
+        <SelectTag
+          :selectedTags="selectedTags"
+          :tags="tags"
+          :handleInput="handleSelectTag"
         />
         <label for="type_in" class="label-text mx-2">AND</label>
         <input id="type_in" v-model="isTagAnd" value="0" type="checkbox" class="checkbox checkbox-secondary" />
@@ -98,7 +95,7 @@ onBeforeRouteUpdate(async (to, _from, next) => {
       </button>
     </form>
     <div class="divider"></div>
-    <Table :headers="headers" :records="records" :tagColors="tagColors"/>
+    <Table :headers="headers" :records="records" :tagInfo="tagInfo"/>
     <Pagination
       :pages="pages"
       :current="page"

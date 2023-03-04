@@ -1,15 +1,15 @@
 <script setup lang="ts">
 interface Props {
   selectedTags: Array<string>
-  options: Array<any>
+  tags: Array<any>
   handleInput: Function
-  handleDelete: Function
+  taggable?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   selectedTags: () => [],
   current: () => [],
   handleInput: () => {},
-  handleDelete: () => {},
+  taggable: false
 })
 
 const selected = computed({
@@ -25,12 +25,27 @@ const selected = computed({
   <v-select
     class="flex justify-center items-center input input-bordered w-full max-w-xs"
     v-model="selected"
-    :options="options"
+    :options="tags"
+    :deselectFromDropdown="true"
+    :closeOnSelect="false"
+    maxHeight="400px"
+    label="name"
     multiple
+    :taggable=taggable
     placeholder="タグ"
-  />
-  <!-- <div v-for="tag in selected" class="badge">
-    {{ tag }}
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-  </div> -->
+  >
+    <template #option="{ name, color }">
+      <div class="badge text-white" :style="'background-color:' + color + ';border-color:' + color">
+        {{ name }}
+      </div>
+    </template>
+    <template #selected-option-container="{ option, deselect, multiple }">
+      <div class="badge flex justify-center items-center mr-1 text-white" :style="'background-color:' + option.color + ';border-color:' + option.color">
+        {{ option.name }}
+        <div @click="deselect(option)" class="ml-1 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </div>
+      </div>
+    </template>
+  </v-select>
 </template>

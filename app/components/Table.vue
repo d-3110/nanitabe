@@ -5,7 +5,7 @@ import { string } from 'yup';
 interface Props {
   headers: Array<string>
   records: Array<any>
-  tagColors?: any
+  tagInfo?: any
   withCheckBox?: boolean
   handleCheck?: Function
   handleBulkSubmit?: Function
@@ -14,7 +14,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   headers: () => [],
   records: () => [{}],
-  tagColors: {},
+  tagInfo: {},
   withCheckBox: false,
   handleCheck: () => {},
   handleBulkSubmit: () => {},
@@ -75,12 +75,13 @@ watchEffect(() => {
               {{ item.value }}
             </NuxtLink>
             <div v-else-if="String(key)== 'tag'">
-              <div v-for="tag in item.value"
+              <NuxtLink v-for="tag in item.value"
                 class="badge mr-2 text-white"
-                :style="'background-color:' + tagColors[tag] + ';border-color:' + tagColors[tag]"
+                :style="'background-color:' + tagInfo[tag]?.color + ';border-color:' + tagInfo[tag]?.color"
+                :to="'/tags/' + tagInfo[tag]?.id"
               >
                 {{ tag }}
-              </div>
+              </NuxtLink>
             </div>
             <span v-else>
               {{ item.value }}
