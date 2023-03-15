@@ -37,18 +37,25 @@ const submit = async () => {
   if (result.valid) {
     buttonDisabled.value = true
     addMessage(true, prompt.value)
+    toggleLoadingMessage()
+    let question = prompt.value
+    prompt.value = ''
     const { data, error } = await useFetch('/api/v1/ai', {
       method: 'POST',
       body: {
-        prompt: prompt.value
+        prompt: question
       }
     })
     if (error.value) {
       console.log('ERROR: ', error.value)
     }
+    toggleLoadingMessage(true)
     addMessage(false, data.value.choices[0].text)
     buttonDisabled.value = false
   }
+}
+const toggleLoadingMessage = (isDelete: boolean = false) => {
+  isDelete ? messages.value.pop() : messages.value.push({ isMine: false, text: '...' })
 }
 const addMessage = (isMine: boolean, text: string) => {
   messages.value.push({ isMine: isMine, text: text })
@@ -68,7 +75,7 @@ const addMessage = (isMine: boolean, text: string) => {
           class="btn btn-lg btn-primary"
           type="button"
           :disabled="isDisabled"
-          :class="{ loading: isDisabled }"
+          :class="{ loading: buttonDisabled }"
         >
           聞く
         </button>
